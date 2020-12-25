@@ -1,0 +1,176 @@
+﻿
+@{ ViewData["Title"] = "SiteDetail"; }
+@model SiteDetailViewModel
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-4">
+        <h2>Site detay</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="@Url.Action("Sites", "Site")">Siteleri Gör</a>
+            </li>
+            <li class="active breadcrumb-item">
+                <strong>Site detay</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-9">
+        <div class="wrapper wrapper-content animated fadeInUp">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="m-b-md">
+                                <a href="/Site/Update?id=@Model.Id" class="btn btn-white btn-xs float-right">Siteyi Güncelle</a>
+                                <h2>@Model.SiteName</h2>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <dl class="row mb-0">
+                                <div class="col-sm-4 text-sm-right"><dt>Durum:</dt> </div>
+                                <div class="col-sm-8 text-sm-left"><dd class="mb-1"><span class="label label-primary">@(Model.IsActive?"Aktif":"Pasif")</span></dd></div>
+                            </dl>
+                            <dl class="row mb-0">
+                                <div class="col-sm-4 text-sm-right"><dt>Ekleyen:</dt> </div>
+                                <div class="col-sm-8 text-sm-left"><dd class="mb-1">@Model.CreatedName</dd> </div>
+                            </dl>
+                            <dl class="row mb-0">
+                                <div class="col-sm-4 text-sm-right"><dt>Ekleme Tarihi:</dt> </div>
+                                <div class="col-sm-8 text-sm-left"><dd class="mb-1">@Model.CreateDate.ToShortDateString()</dd> </div>
+                            </dl>
+
+
+                        </div>
+                        <div class="col-lg-6" id="cluster_info">
+
+                            <dl class="row mb-0">
+                                <div class="col-sm-4 text-sm-right">
+                                    <dt>Son Güncelleme:</dt>
+                                </div>
+                                <div class="col-sm-8 text-sm-left">
+                                    <dd class="mb-1">@Model.ModifiedName   @Model.ModifyDate?.ToShortDateString()</dd>
+                                </div>
+                            </dl>
+                        </div>
+                    </div>
+
+                    <div class="row m-t-sm">
+                        <div class="col-lg-12">
+                            <div class="panel blank-panel">
+                                <div class="panel-heading">
+                                    <div class="panel-options">
+                                        <ul class="nav nav-tabs">
+                                            <li><a class="nav-link active" href="#tab-1" data-toggle="tab">Ön Bilgi</a></li>
+                                            <li><a class="nav-link" href="#tab-2" data-toggle="tab">Son Aktiviteler ve Detayları</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="panel-body">
+
+                                    <div class="tab-content">
+                                        <div class="tab-pane active" id="tab-1">
+                                            <div class="feed-activity-list">
+                                                @foreach (var item in Model.Definitions)
+                                                {
+                                    <div class="feed-element">
+                                        <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+                                        @if (item.ModifiedName != null)
+                                        {
+                        <div class="media-body ">
+
+                            <strong>@item.Name </strong>@item.ModifiedName tarafından güncellendi <strong>@item.Description</strong>. <br>
+                            @if (item?.ModifyDate != null)
+                            {
+        <small class="text-muted">@((DateTime.Now-item?.ModifyDate)?.Days) gün önce @item?.ModifyDate?.ToShortTimeString() de güncellendi</small>}
+
+                        </div> }
+                    else
+                    {
+    <div class="media-body ">
+
+        Güncelleme yok
+    </div>}
+                                    </div>}
+                                            </div>
+
+                                        </div>
+                                        <div class="tab-pane" id="tab-2">
+                                            <div class="ibox-title">
+                                                <h5>Burada siteye tanım ekleyebilirsiniz !</h5>
+                                                <div class="ibox-tools">
+                                                    <a href="/Definition/Create?id=@Model.Id" class="btn btn-primary btn-xs mr-2">Tanım Ekle</a>
+                                                </div>
+                                            </div>
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Durum</th>
+                                                        <th>Tanım</th>
+                                                        <th>Açıklama</th>
+                                                        <th>Detay</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var item in Model.Definitions)
+                                                    {
+                                        <tr>
+                                            <td>
+                                                <span class="label label-primary"><i class="fa fa-check"></i> @item.IsActive</span>
+                                            </td>
+                                            <td>
+                                                <a href="@Url.Action("Detail", "Definition",new { id=item.Id})">@item.Name</a>
+                                            </td>
+                                            <td>
+                                                @item.Description
+                                            </td>
+                                            <td>
+                                                <strong>@item.Name </strong>@item.CreatedName tarafından eklendi <strong>@item.Description</strong>. <br>
+                                                <small class="text-muted">@((DateTime.Now-item.CreateDate).Days) gün önce @item.CreateDate.ToShortTimeString() de eklendi</small>
+                                            </td>
+                                            <td>
+                                                <a href="#" class="btn btn-white btn-sm  delete-button" data-id="@item.Id" data-siteId="@Model.Id"><i class="fa fa-remove mr-1"></i>Sil</a>
+                                            </td>
+                                        </tr>}
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="wrapper wrapper-content project-manager">
+            <h4>Site Açıklaması</h4>
+            <img src="~/Images/zender_logo.png" class="img-fluid">
+            <p class="small">
+                @Model.Description
+            </p>
+            <p class="small font-bold">
+                <span><i class="fa fa-circle text-warning"></i>Öneriler</span>
+            </p>
+            <h5>Kısayollar</h5>
+            <ul class="tag-list" style="padding: 0">
+                <li><a href="/Definition/Definitions"><i class="fa fa-tag"></i>Tüm Tanımlar</a></li>
+                <li><a href="/Field/Fields"><i class="fa fa-tag"></i> Tüm Alanlar</a></li>
+                <li><a href="/FieldValue/FieldValues"><i class="fa fa-tag"></i> Tüm Veriler</a></li>
+            </ul>
+            <h5>Project files</h5>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script src="~/js/pages/definition/delete.js"></script>
+}

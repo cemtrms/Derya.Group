@@ -1,0 +1,112 @@
+﻿
+@{ ViewData["Title"] = "Field"; }
+@model List<FieldsViewModel>
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-4">
+        <h2>Alan listesi</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="@Url.Action("Sites", "Site")">Site</a>
+            </li>
+            <li class="active breadcrumb-item">
+                <strong>Alan listesi</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInUp">
+
+    <div class="ibox">
+        <div class="ibox-title">
+            <h5>Tüm Alanlar</h5>
+        </div>
+        <div class="ibox-content">
+            <div class="m-b-sm m-t-sm">
+
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <button tabindex="-1" class="btn btn-white btn-sm" type="button"><i class="fa fa-refresh"></i> Yenile</button>
+                    </div>
+                    <input type="text" class="form-control form-control-sm">
+
+                    <div class="input-group-append">
+                        <button tabindex="-1" class="btn btn-primary btn-sm" type="button">Go!</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-list">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Durum</th>
+                            <th>Alan</th>
+                            <th>Tanım</th>
+                            <th>Site</th>
+                            <th>Tip</th>
+                            <th>Ekleyen</th>
+                            <th>Ekleme Tarihi</th>
+                            <th>Düzenleyen</th>
+                            <th>Düzenleme Tarihi</th>
+                            <th>İşlemler</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+            <tr>
+                <td class="project-status">
+                    <span class="label @(item.IsActive?" label-primary":" label-danger")">@(item.IsActive?"Aktif":"Pasif")</span>
+                </td>
+                <td class="project-title">
+                    <a href="@Url.Action("Detail", "Field",new { id=item.Id})">@item.FieldName</a>
+                    <br />
+                </td>
+                <td class="project-title">
+                    <a href="@Url.Action("Detail", "Definition",new { id=item.DefinitionId})">@item.DefinitionName</a>
+                    <br />
+                </td>
+                <td class="project-title">
+                    <a href="@Url.Action("Detail", "Site",new { id=item.SiteId})">@item.SiteName</a>
+                    <br />
+                </td>
+                <td class="project-title">
+                    @*<a href=""><img alt="image" class="rounded-circle" src="~/Images/a3.jpg"></a>*@
+                    <small>@item.FieldName</small>
+                </td>
+                <td class="project-title">
+                    @*<a href=""><img alt="image" class="rounded-circle" src="~/Images/a3.jpg"></a>*@
+                    <small>@item.CreatedName</small>
+                </td>
+                <td class="project-completion">
+                    <small>@item.CreateDate</small>
+                </td>
+                <td class="project-completion">
+                    <div class="project-title">
+                        <small>@item?.ModifiedName</small>
+                        @*<a href=""><img alt="image" class="rounded-circle" src="~/Images/a3.jpg"></a>*@
+                    </div>
+                </td>
+                <td class="project-completion">
+                    <small>@item?.ModifyDate</small>
+                </td>
+                <td class="project-actions">
+                    <a href="/Field/Detail?id=@item.Id" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i>Güncelle</a>
+                </td>
+                <td>
+                    <a href="#" class="btn btn-white btn-sm  delete-button" data-id="@item.Id" data-siteId="@item.SiteId" data-definitionId="@item.DefinitionId"><i class="fa fa-remove mr-2"></i>Sil</a>
+                </td>
+            </tr>
+}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script src="~/js/pages/field/delete.js"></script>
+}
+
